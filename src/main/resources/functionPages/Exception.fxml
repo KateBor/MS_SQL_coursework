@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="214.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ms_sql_coursework.controllers.ExceptionController">
+   <children>
+      <Label layoutX="88.0" layoutY="45.0" text="Что-то пошло не так!" textFill="#a80000">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="message" layoutX="35.0" layoutY="97.0" prefHeight="91.0" prefWidth="283.0" text="Message" wrapText="true" />
+   </children>
+</AnchorPane>
