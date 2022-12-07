@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lombok.Data;
 import ms_sql_coursework.controllers.*;
+import ms_sql_coursework.model.ParamRequest;
 import ms_sql_coursework.model.RolesContainer;
 import ms_sql_coursework.services.AuthService;
 
@@ -79,7 +80,7 @@ public class MS_SQL_App extends Application {
         controller.fillButtons(email);
     }
 
-    public void showParamsWindow(String name, String funcName, String staffId) {
+    public void showParamsWindow(String name, String funcName, String staffId, ParamRequest oldInfo) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MS_SQL_App.class.getResource("/functionPages/Params.fxml"));
         try {
@@ -92,7 +93,7 @@ public class MS_SQL_App extends Application {
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
-            controller.chooseMethod(funcName, null);
+            controller.chooseMethod(funcName, null, oldInfo);
 
         } catch (Exception e) {
             e.printStackTrace();

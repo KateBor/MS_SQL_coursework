@@ -55,14 +55,14 @@ public class ManagerController implements Controller {
             ResultSet resultSet = paramService.chooseWithoutParamFunc(funcName, staffId);
             msSqlApp.showResultWindow(name, resultSet);
         } else {
-            msSqlApp.showParamsWindow(name, funcName, staffId);
+            msSqlApp.showParamsWindow(name, funcName, staffId, null);
         }
     }
 
     @Override
     public void fillButtons(String email) {
         comboBox.getItems().clear();
-        for (var i: managerMap.keySet()) {
+        for (var i: managerMap.keySet().stream().sorted().toList()) {
             comboBox.getItems().add(i);
         }
         Integer stId = authService.getStaffIdByEmail(email);
@@ -85,7 +85,7 @@ public class ManagerController implements Controller {
     @FXML
     @Override
     public void onClickEdit() {
-        msSqlApp.showParamsWindow("редактировать свои данные", "changeMyInfo", staffId);
+        msSqlApp.showParamsWindow("редактировать свои данные", "changeMyInfo", staffId, null);
     }
 
     @Override

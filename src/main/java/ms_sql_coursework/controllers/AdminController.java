@@ -53,7 +53,7 @@ public class AdminController implements Controller {
     @Override
     public void fillButtons(String email) {
         comboBox.getItems().clear();
-        for (var i: adminMap.keySet()) {
+        for (var i: adminMap.keySet().stream().sorted().toList()) {
             comboBox.getItems().add(i);
         }
         Integer stId = authService.getStaffIdByEmail(email);
@@ -81,14 +81,14 @@ public class AdminController implements Controller {
             ResultSet resultSet = paramService.chooseWithoutParamFunc(funcName, staffId);
             msSqlApp.showResultWindow(name, resultSet);
         } else {
-            msSqlApp.showParamsWindow(name, funcName, staffId);
+            msSqlApp.showParamsWindow(name, funcName, staffId, null);
         }
     }
 
     @FXML
     @Override
     public void onClickEdit() {
-        msSqlApp.showParamsWindow("редактировать свои данные", "changeMyInfo", staffId);
+        msSqlApp.showParamsWindow("редактировать свои данные", "changeMyInfo", staffId, null);
     }
 
     @Override

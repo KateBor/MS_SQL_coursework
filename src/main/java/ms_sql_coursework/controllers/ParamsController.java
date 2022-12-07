@@ -27,6 +27,7 @@ public class ParamsController {
     Integer staffId;
     Controller controller;
     StaffController staffController;
+    ParamRequest oldInfo;
 
     @FXML
     public Label label1;
@@ -92,7 +93,7 @@ public class ParamsController {
         staffController = new StaffController(conn, msSqlApp);
     }
 
-    public void chooseMethod(String funcName, ParamRequest request) throws SQLException { //47 методов
+    public void chooseMethod(String funcName, ParamRequest request, ParamRequest oldInfo) throws SQLException {
         this.funcName = funcName;
         switch (funcName) {
             //admin
@@ -106,15 +107,15 @@ public class ParamsController {
             case "EXEC change_job_name ?,?" -> changeJobName(request);
             case "EXEC add_department ?,?" -> addDepartment(request);
             case "EXEC change_department_name ?,?" -> changeDepartmentName(request);
-            case "EXEC output_staff_by_department ?" -> outputStaffByDepartment(request); //?
+            case "EXEC Output_staff_by_department ?" -> outputStaffByDepartment(request); //?
             case "EXEC change_staff_status ?" -> changeStaffStatus(request);
 
-            case "EXEC output_staff_history ?" -> outputStaffHistory(request);
+            case "EXEC Output_staff_history ?" -> outputStaffHistory(request);
             case "EXEC add_movie ?,?,?,?" -> addMovie(request);
 
             case "EXEC add_location ?,?,?" -> addLocation(request);
             case "EXEC Output_movies_history ?" -> outputMoviesHistory(request);
-            case "EXEC output_movies_staff ?" -> outputMoviesStaff(request);
+            case "EXEC Output_movies_staff ?" -> outputMoviesStaff(request);
 
             case "EXEC Output_staff_info ?" -> outputStaffInfo(request);
 
@@ -130,7 +131,7 @@ public class ParamsController {
 
             case "changeMyInfo" -> changeMyInfo(request);
             case "changeMovieInfo" -> changeMovieInfo(request);
-            case "changeStaffInfo" -> changeStaffInfo(request);
+            case "changeStaffInfo" -> changeStaffInfo(request, oldInfo);
             case "changeFilmingInfo" -> changeFilmingInfo(request);
         }
     }
@@ -163,7 +164,7 @@ public class ParamsController {
         if (!text8.getText().equals("") && !text8.getText().equals(NULL_FORMAT)) {
             request.setParam8(text8.getText());
         }
-        chooseMethod(funcName, request);
+        chooseMethod(funcName, request, null);
     }
 
     public void addUser(ParamRequest request) {
@@ -627,22 +628,43 @@ public class ParamsController {
     }
 
 
-    private void changeStaffInfo(ParamRequest request) {
+    private void changeStaffInfo(ParamRequest request, ParamRequest oldInfoReq) {
+        if (oldInfoReq != null) {
+            this.oldInfo = oldInfoReq;
+        }
         if (request != null) { //отправка данных и получение результата
+            if (request.getParam1().equals(oldInfo.getParam1())) {
+                request.setParam1(null);
+            }
+            if (request.getParam2().equals(oldInfo.getParam2())) {
+                request.setParam2(null);
+            }
+            if (request.getParam3().equals(oldInfo.getParam3())) {
+                request.setParam3(null);
+            }
+            if (request.getParam4().equals(oldInfo.getParam4())) {
+                request.setParam4(null);
+            }
+            if (request.getParam5().equals(oldInfo.getParam5())) {
+                request.setParam5(null);
+            }
             String answer = paramService.changeMyInfo(request);
             if (answer.equals(SUCCESS)) {
                 MS_SQL_App.showSuccessWindow();
-                //staffController.updateStaffWindow(staffId);
             } else {
                 MS_SQL_App.showExceptionWindow(answer);
             }
         } else {
             text1.setVisible(true);
+            text1.setText(oldInfo.getParam1());
             text2.setVisible(true);
+            text2.setText(oldInfo.getParam2());
             text3.setVisible(true);
+            text3.setText(oldInfo.getParam3());
             text4.setVisible(true);
+            text4.setText(oldInfo.getParam4());
             text5.setVisible(true);
-            text5.setText(PHONE_FORMAT);
+            text5.setText(oldInfo.getParam5());
             label1.setText("Пароль");
             label2.setText("Имя");
             label3.setText("Фамилия");
@@ -657,7 +679,6 @@ public class ParamsController {
             String answer = paramService.changeFilmingInfo(request);
             if (answer.equals(SUCCESS)) {
                 MS_SQL_App.showSuccessWindow();
-                //staffController.updateStaffWindow(staffId);
             } else {
                 MS_SQL_App.showExceptionWindow(answer);
             }

@@ -3,8 +3,10 @@ package ms_sql_coursework.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import lombok.Data;
 import ms_sql_coursework.MS_SQL_App;
+import ms_sql_coursework.model.ParamRequest;
 import ms_sql_coursework.services.AuthService;
 import ms_sql_coursework.services.ParamService;
 
@@ -61,7 +63,16 @@ public class StaffController {
 
     @FXML
     public void editStaffInfo() {
-        msSqlApp.showParamsWindow("редактировать данные сотрудника", "changeStaffInfo", staffId.toString());
+        ParamRequest oldInfo = new ParamRequest();
+        oldInfo.setParam1(password.getText());
+        oldInfo.setParam2(name.getText());
+        oldInfo.setParam3(surname.getText());
+        oldInfo.setParam4(birthdate.getText());
+        oldInfo.setParam5(phoneNumber.getText());
+
+        msSqlApp.showParamsWindow("редактировать данные сотрудника", "changeStaffInfo", staffId.toString(), oldInfo);
+        Stage stage = (Stage) editButton.getScene().getWindow();
+        stage.close();
     }
 
     public void updateStaffWindow(Integer staffId) {

@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static ms_sql_coursework.model.Constants.*;
 
@@ -19,8 +21,18 @@ public class ParamService {
         authService = new AuthService(connection);
     }
 
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean validate(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
     public String addUser(ParamRequest request) {
         try {
+            if (!validate(request.getParam2())) {
+                return "Неправильный формат почты. ";
+            }
             PreparedStatement ps = connection.prepareStatement(request.getFuncName());
             ps.setString(1, request.getParam1());
             ps.setString(2, request.getParam2());
