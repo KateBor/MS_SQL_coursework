@@ -324,6 +324,11 @@ public class ParamService {
             Integer movieId = getMovieIdByTitle(parts[0]);
             Integer filmingId = getFilmingId(movieId, parts[1]);
 
+            //если человек уже занят в эту дату то его нельзя на ту же дату записать
+            if (findStaffFilming(staffId, parts[1])!= null && findStaffFilming(staffId, parts[1]).next()) {
+                return "Сотрудник уже занят в эту дату.";
+            }
+
             ps.setInt(1, workerPosId);
             ps.setInt(2, filmingId);
             ps.setInt(3, Integer.parseInt(request.getParam8()));
@@ -331,6 +336,17 @@ public class ParamService {
             return SUCCESS;
         } catch (SQLException e) {
             return "Не все поля заполнены. ";
+        }
+    }
+
+    private ResultSet findStaffFilming(Integer staffId, String date) {
+        try { //wp, filming (movie, date)
+            PreparedStatement ps = connection.prepareStatement("EXEC find_staff_filming ?,?");
+            ps.setInt(1, staffId);
+            ps.setString(2, date);
+            return ps.executeQuery();
+        } catch (SQLException e) {
+            return null;
         }
     }
 
